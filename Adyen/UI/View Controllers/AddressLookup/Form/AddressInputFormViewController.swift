@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -16,7 +16,6 @@ public class AddressInputFormViewController: FormViewController {
         self.viewModel = viewModel
         
         super.init(
-            scrollEnabled: true,
             style: viewModel.style,
             localizationParameters: viewModel.localizationParameters
         )

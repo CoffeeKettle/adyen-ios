@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2019 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -271,22 +271,8 @@ extension ComponentManager: PaymentComponentBuilder {
             return nil
         #endif
     }
-    
-    internal func build(paymentMethod: PayByBankUSPaymentMethod) -> PaymentComponent? {
-        let configuration: PayByBankUSComponent.Configuration = .init()
-        return PayByBankUSComponent(
-            paymentMethod: paymentMethod,
-            context: context,
-            configuration: configuration
-        )
-    }
-}
 
-// MARK: - Privates
-
-private extension ComponentManager {
-    
-    func createCardComponent(with paymentMethod: AnyCardPaymentMethod) -> PaymentComponent? {
+    private func createCardComponent(with paymentMethod: AnyCardPaymentMethod) -> PaymentComponent? {
         var cardConfiguration = configuration.card.cardComponentConfiguration
         cardConfiguration.style = configuration.style.formComponent
         cardConfiguration.localizationParameters = configuration.localizationParameters
@@ -298,7 +284,7 @@ private extension ComponentManager {
         )
     }
 
-    func createBancontactComponent(with paymentMethod: BCMCPaymentMethod) -> PaymentComponent? {
+    private func createBancontactComponent(with paymentMethod: BCMCPaymentMethod) -> PaymentComponent? {
         let cardConfiguration = configuration.card
         let configuration = CardComponent.Configuration(
             style: configuration.style.formComponent,
@@ -317,7 +303,7 @@ private extension ComponentManager {
         )
     }
 
-    func createPreApplePayComponent(with paymentMethod: ApplePayPaymentMethod) -> PaymentComponent? {
+    private func createPreApplePayComponent(with paymentMethod: ApplePayPaymentMethod) -> PaymentComponent? {
         guard let applePay = configuration.applePay else {
             adyenPrint("Failed to instantiate ApplePayComponent because ApplePayConfiguration is missing")
             return nil
@@ -353,7 +339,7 @@ private extension ComponentManager {
         }
     }
 
-    func createSEPAComponent(_ paymentMethod: SEPADirectDebitPaymentMethod) -> SEPADirectDebitComponent {
+    private func createSEPAComponent(_ paymentMethod: SEPADirectDebitPaymentMethod) -> SEPADirectDebitComponent {
         let config = SEPADirectDebitComponent.Configuration(
             style: configuration.style.formComponent,
             localizationParameters: configuration.localizationParameters
@@ -365,7 +351,7 @@ private extension ComponentManager {
         )
     }
 
-    func createBACSDirectDebit(_ paymentMethod: BACSDirectDebitPaymentMethod) -> BACSDirectDebitComponent {
+    private func createBACSDirectDebit(_ paymentMethod: BACSDirectDebitPaymentMethod) -> BACSDirectDebitComponent {
         let bacsConfiguration = BACSDirectDebitComponent.Configuration(
             style: configuration.style.formComponent,
             localizationParameters: configuration.localizationParameters
@@ -379,7 +365,7 @@ private extension ComponentManager {
         return bacsDirectDebitComponent
     }
 
-    func createACHDirectDebitComponent(_ paymentMethod: ACHDirectDebitPaymentMethod) -> ACHDirectDebitComponent {
+    private func createACHDirectDebitComponent(_ paymentMethod: ACHDirectDebitPaymentMethod) -> ACHDirectDebitComponent {
         let config = ACHDirectDebitComponent.Configuration(
             style: configuration.style.formComponent,
             shopperInformation: configuration.shopperInformation,
@@ -395,7 +381,7 @@ private extension ComponentManager {
         )
     }
 
-    func createQiwiWalletComponent(_ paymentMethod: QiwiWalletPaymentMethod) -> QiwiWalletComponent {
+    private func createQiwiWalletComponent(_ paymentMethod: QiwiWalletPaymentMethod) -> QiwiWalletComponent {
         let config = QiwiWalletComponent.Configuration(
             style: configuration.style.formComponent,
             shopperInformation: configuration.shopperInformation,
@@ -408,7 +394,7 @@ private extension ComponentManager {
         )
     }
 
-    func createMBWayComponent(_ paymentMethod: MBWayPaymentMethod) -> MBWayComponent? {
+    private func createMBWayComponent(_ paymentMethod: MBWayPaymentMethod) -> MBWayComponent? {
         let config = MBWayComponent.Configuration(
             style: configuration.style.formComponent,
             shopperInformation: configuration.shopperInformation,
@@ -421,7 +407,7 @@ private extension ComponentManager {
         )
     }
 
-    func createBLIKComponent(_ paymentMethod: BLIKPaymentMethod) -> BLIKComponent? {
+    private func createBLIKComponent(_ paymentMethod: BLIKPaymentMethod) -> BLIKComponent? {
         let config = BLIKComponent.Configuration(
             style: configuration.style.formComponent,
             localizationParameters: configuration.localizationParameters
@@ -433,7 +419,7 @@ private extension ComponentManager {
         )
     }
 
-    func createBoletoComponent(_ paymentMethod: BoletoPaymentMethod) -> BoletoComponent {
+    private func createBoletoComponent(_ paymentMethod: BoletoPaymentMethod) -> BoletoComponent {
         let config = BoletoComponent.Configuration(
             style: configuration.style.formComponent,
             localizationParameters: configuration.localizationParameters,
@@ -446,4 +432,5 @@ private extension ComponentManager {
             configuration: config
         )
     }
+
 }

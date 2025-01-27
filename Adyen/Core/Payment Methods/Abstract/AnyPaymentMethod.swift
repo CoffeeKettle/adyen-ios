@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -12,7 +12,6 @@ internal enum AnyPaymentMethod: Codable {
     case storedPayPal(StoredPayPalPaymentMethod)
     case storedBCMC(StoredBCMCPaymentMethod)
     case storedBlik(StoredBLIKPaymentMethod)
-    case storedPayByBankUS(StoredPayByBankUSPaymentMethod)
     case storedAchDirectDebit(StoredACHDirectDebitPaymentMethod)
     case storedCashAppPay(StoredCashAppPayPaymentMethod)
     case storedTwint(StoredTwintPaymentMethod)
@@ -35,17 +34,13 @@ internal enum AnyPaymentMethod: Codable {
     case econtextStores(EContextPaymentMethod)
     case econtextATM(EContextPaymentMethod)
     case econtextOnline(EContextPaymentMethod)
-    case boletoBancario(BoletoPaymentMethod)
-    case boletoBancarioSantander(BoletoPaymentMethod)
-    case boletoBancarioItau(BoletoPaymentMethod)
-    case primeiroPayBoleto(BoletoPaymentMethod)
+    case boleto(BoletoPaymentMethod)
     case affirm(AffirmPaymentMethod)
     case atome(AtomePaymentMethod)
     case onlineBanking(OnlineBankingPaymentMethod)
     case upi(UPIPaymentMethod)
     case cashAppPay(CashAppPayPaymentMethod)
     case twint(TwintPaymentMethod)
-    case payByBankUS(PayByBankUSPaymentMethod)
 
     case none
     
@@ -77,24 +72,19 @@ internal enum AnyPaymentMethod: Codable {
         case let .econtextStores(paymentMethod): return paymentMethod
         case let .econtextATM(paymentMethod): return paymentMethod
         case let .econtextOnline(paymentMethod): return paymentMethod
-        case let .boletoBancario(paymentMethod): return paymentMethod
-        case let .boletoBancarioSantander(paymentMethod): return paymentMethod
-        case let .boletoBancarioItau(paymentMethod): return paymentMethod
-        case let .primeiroPayBoleto(paymentMethod): return paymentMethod
+        case let .boleto(paymentMethod): return paymentMethod
         case let .affirm(paymentMethod): return paymentMethod
         case let .atome(paymentMethod): return paymentMethod
         case let .onlineBanking(paymentMethod): return paymentMethod
         case let .upi(paymentMethod): return paymentMethod
         case let .cashAppPay(paymentMethod): return paymentMethod
         case let .twint(paymentMethod): return paymentMethod
-        case let .storedPayByBankUS(paymentMethod): return paymentMethod
-        case let .payByBankUS(paymentMethod): return paymentMethod
         case .none: return nil
         }
     }
 
     // MARK: - Decoding
-    
+
     internal init(from decoder: Decoder) throws {
         self = AnyPaymentMethodDecoder.decode(from: decoder)
     }

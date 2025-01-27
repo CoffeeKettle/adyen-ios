@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -86,24 +86,20 @@ internal struct AnalyticsData: Encodable {
     internal var paymentMethods: [String] = []
 
     internal let component: String
-    
-    internal let level: AnalyticsLevel
 
     // MARK: - Initializers
 
     internal init(
         flavor: AnalyticsFlavor,
         additionalFields: AdditionalAnalyticsFields?,
-        configuration: AnalyticsConfiguration
+        context: AnalyticsContext
     ) {
         self.flavor = flavor.value
         self.amount = additionalFields?.amount
         self.sessionId = additionalFields?.sessionId
         
-        self.version = configuration.context.version
-        self.platform = configuration.context.platform.rawValue
-        
-        self.level = configuration.analyticsLevel
+        self.version = context.version
+        self.platform = context.platform.rawValue
 
         switch flavor {
         case let .dropIn(type, paymentMethods):

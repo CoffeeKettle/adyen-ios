@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -14,10 +14,8 @@ public final class UPIComponent: PaymentComponent,
     LoadingComponent {
 
     /// The flow types for UPI component.
-    public enum UPIFlowType: Int {
-        /// Transaction handled through UPI-enabled apps.
+    internal enum UPIFlowType: Int {
         case upiApps = 0
-        /// Transaction initiated by scanning a QR code.
         case qrCode = 1
     }
 
@@ -38,6 +36,7 @@ public final class UPIComponent: PaymentComponent,
         internal static let upiIntent = "upi_intent"
         internal static let vpaFlowIdentifier = "UPI/VPA"
         internal static let noAppsVpaSegmentTitle = "VPA"
+        
         internal static let qrCodeIcon = "qrcode"
     }
 
@@ -70,9 +69,7 @@ public final class UPIComponent: PaymentComponent,
     
     internal private(set) var currentSelectedItemIdentifier: String?
 
-    /// Represents the selected UPI (Unified Payments Interface) flow for the payment component.
-    /// Determines the specific UPI transaction process to follow.
-    @AdyenObservable(.upiApps) public private(set) var selectedUPIFlow: UPIFlowType
+    internal private(set) var selectedUPIFlow: UPIFlowType = .upiApps
 
     /// Initializes the UPI  component.
     ///
@@ -92,8 +89,6 @@ public final class UPIComponent: PaymentComponent,
             self.currentSelectedItemIdentifier = Constants.vpaFlowIdentifier
         }
     }
-
-    // MARK: - LoadingComponent
 
     public func stopLoading() {
         continueButton.showsActivityIndicator = false
@@ -272,7 +267,6 @@ public final class UPIComponent: PaymentComponent,
 
     private lazy var formViewController: FormViewController = {
         let formViewController = FormViewController(
-            scrollEnabled: configuration.showsSubmitButton,
             style: configuration.style,
             localizationParameters: configuration.localizationParameters
         )
@@ -292,11 +286,8 @@ public final class UPIComponent: PaymentComponent,
         vpaInputItem.isVisible = upiAppsList.isEmpty
         
         formViewController.append(vpaInputItem)
-
-        if configuration.showsSubmitButton {
-            formViewController.append(FormSpacerItem(numberOfSpaces: 2))
-            formViewController.append(continueButton)
-        }
+        formViewController.append(FormSpacerItem(numberOfSpaces: 2))
+        formViewController.append(continueButton)
 
         return formViewController
     }()
@@ -316,7 +307,7 @@ extension UPIComponent {
     }
     
     private func didSelectContinueButton() {
-        guard validate() else { return }
+        guard formViewController.validate() else { return }
 
         guard canSubmit() else {
             showError()
@@ -326,7 +317,7 @@ extension UPIComponent {
         continueButton.showsActivityIndicator = true
         formViewController.view.isUserInteractionEnabled = false
 
-        submitPayment()
+        submit()
     }
 
     private func didChangeSegmentedControlIndex(_ index: Int) {
@@ -417,7 +408,7 @@ private extension UPIComponent {
         }
     }
     
-    func submitPayment() {
+    func submit() {
         switch selectedUPIFlow {
         case .upiApps:
             let details: UPIComponentDetails
@@ -446,16 +437,3 @@ private extension UPIComponent {
 
 @_spi(AdyenInternal)
 extension UPIComponent: AdyenObserver {}
-
-// MARK: - SubmitCustomizable
-
-extension UPIComponent: SubmittableComponent {
-
-    public func submit() {
-        didSelectContinueButton()
-    }
-
-    public func validate() -> Bool {
-        formViewController.validate()
-    }
-}

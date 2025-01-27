@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -15,6 +15,7 @@ internal protocol DelegatedAuthenticationViewDelegate: AnyObject {
 }
 
 @available(iOS 16.0, *)
+// swiftlint:disable:next type_body_length
 internal final class DelegatedAuthenticationView: UIView {
     
     private enum Constants {
@@ -47,7 +48,6 @@ internal final class DelegatedAuthenticationView: UIView {
     internal lazy var titleLabel: UILabel = .init(
         style: style.headerTextStyle,
         accessibilityPostfix: "titleLabel",
-        multiline: true,
         textAlignment: .center,
         scopeInstance: self
     )
@@ -63,7 +63,8 @@ internal final class DelegatedAuthenticationView: UIView {
     internal lazy var tileAndSubtitleStackView: UIStackView = .init(
         arrangedSubviews: [logoImage, titleLabel, descriptionLabel],
         spacing: 8,
-        view: self
+        view: self,
+        scopedInstance: self
     )
     
     // MARK: Payment Information
@@ -104,7 +105,8 @@ internal final class DelegatedAuthenticationView: UIView {
         distribution: .equalSpacing,
         alignment: .center,
         spacing: 12,
-        view: self
+        view: self,
+        scopedInstance: self
     )
     
     internal lazy var cardAndAmountDetailsStackView: UIStackView = {
@@ -114,7 +116,8 @@ internal final class DelegatedAuthenticationView: UIView {
             alignment: .center,
             spacing: 8,
             view: self,
-            withBackground: true
+            withBackground: true,
+            scopedInstance: self
         )
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 20, trailing: 16)
@@ -123,7 +126,7 @@ internal final class DelegatedAuthenticationView: UIView {
     
     // MARK: Additional Information
     
-    internal lazy var firstInfoImage: UIImageView = .init(infoImageStyle: style.infoImageStyle)
+    internal lazy var firstInfoImage: UIImageView = .init(infoImageStyle: style.infoImageStyle, scopedInstance: self)
     
     internal lazy var firstInfoLabel: UILabel = .init(
         style: style.additionalInformationTextStyle,
@@ -138,9 +141,10 @@ internal final class DelegatedAuthenticationView: UIView {
         axis: .horizontal,
         alignment: .center,
         spacing: 12,
-        view: self
+        view: self,
+        scopedInstance: self
     )
-    internal lazy var secondInfoImage: UIImageView = .init(infoImageStyle: style.infoImageStyle)
+    internal lazy var secondInfoImage: UIImageView = .init(infoImageStyle: style.infoImageStyle, scopedInstance: self)
     
     internal lazy var secondInfoLabel: UILabel = .init(
         style: style.additionalInformationTextStyle,
@@ -155,10 +159,11 @@ internal final class DelegatedAuthenticationView: UIView {
         axis: .horizontal,
         alignment: .center,
         spacing: 12,
-        view: self
+        view: self,
+        scopedInstance: self
     )
     
-    internal lazy var thirdInfoImage: UIImageView = .init(infoImageStyle: style.infoImageStyle)
+    internal lazy var thirdInfoImage: UIImageView = .init(infoImageStyle: style.infoImageStyle, scopedInstance: self)
     
     internal lazy var thirdInfoLabel: UILabel = .init(
         style: style.additionalInformationTextStyle,
@@ -173,7 +178,8 @@ internal final class DelegatedAuthenticationView: UIView {
         axis: .horizontal,
         alignment: .center,
         spacing: 12,
-        view: self
+        view: self,
+        scopedInstance: self
     )
 
     internal lazy var additionalInformationStackView: UIStackView = {
@@ -187,7 +193,8 @@ internal final class DelegatedAuthenticationView: UIView {
             alignment: .leading,
             spacing: 8,
             view: self,
-            withBackground: true
+            withBackground: true,
+            scopedInstance: self
         )
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.directionalLayoutMargins = NSDirectionalEdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16)
@@ -222,7 +229,8 @@ internal final class DelegatedAuthenticationView: UIView {
         ],
         distribution: .fillEqually,
         spacing: 8,
-        view: self
+        view: self,
+        scopedInstance: self
     )
 
     // MARK: Container views
@@ -236,7 +244,8 @@ internal final class DelegatedAuthenticationView: UIView {
             additionalInformationStackView
         ],
         spacing: 16,
-        view: self
+        view: self,
+        scopedInstance: self
     )
 
     // MARK: - initializers

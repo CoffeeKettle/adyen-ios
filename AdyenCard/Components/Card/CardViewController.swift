@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -89,7 +89,6 @@ internal class CardViewController: FormViewController {
         }
         
         super.init(
-            scrollEnabled: configuration.showsSubmitButton,
             style: formStyle,
             localizationParameters: localizationParameters
         )
@@ -291,11 +290,9 @@ extension CardViewController {
             append(billingAddressItem)
         }
 
-        if configuration.showsSubmitButton {
-            append(FormSpacerItem())
-            append(items.button)
-            append(FormSpacerItem(numberOfSpaces: 2))
-        }
+        append(FormSpacerItem())
+        append(items.button)
+        append(FormSpacerItem(numberOfSpaces: 2))
     }
     
     private var billingAddressItem: FormItem? {

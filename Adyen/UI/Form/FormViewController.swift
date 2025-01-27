@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2017 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -11,26 +11,10 @@ import UIKit
 @_spi(AdyenInternal)
 open class FormViewController: UIViewController, AdyenObserver, PreferredContentSizeConsumer {
 
-    private enum Animations {
-        static let keyboardBottomInset = "keyboardBottomInset"
-        static let firstResponder = "firstResponder"
+    fileprivate enum Animations {
+        fileprivate static let keyboardBottomInset = "keyboardBottomInset"
+        fileprivate static let firstResponder = "firstResponder"
     }
-
-    // MARK: - UI elements
-
-    private let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        return scrollView
-    }()
-
-    private let formView: FormView = {
-        let form = FormView()
-        form.translatesAutoresizingMaskIntoConstraints = false
-        return form
-    }()
-
-    // MARK: - Public properties
 
     public var requiresKeyboardInput: Bool { formRequiresInputView() }
 
@@ -39,47 +23,30 @@ open class FormViewController: UIViewController, AdyenObserver, PreferredContent
 
     /// Delegate to handle different viewController events.
     public weak var delegate: ViewControllerDelegate?
+    
+    internal lazy var keyboardObserver = KeyboardObserver()
 
-    // MARK: - Private properties
-
-    private var keyboardObserver = KeyboardObserver()
-    private var scrollEnabled: Bool
-
-    // MARK: - Initializers
+    // MARK: - Public
 
     /// Initializes the FormViewController.
     ///
     /// - Parameters:
-    ///   - scrollEnabled: Boolean value that determines whether the form view contains a scroll view in its view hierarchy.
     ///   - style: The `FormViewController` UI style.
     ///   - localizationParameters: The localization parameters.
     public init(
-        scrollEnabled: Bool,
         style: ViewStyle,
         localizationParameters: LocalizationParameters?
     ) {
-        self.scrollEnabled = scrollEnabled
         self.style = style
         self.localizationParameters = localizationParameters
         super.init(nibName: nil, bundle: Bundle(for: FormViewController.self))
     }
 
-    @available(*, unavailable)
-    public required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     // MARK: - View lifecycle
-
-    override open func loadView() {
-        super.loadView()
-        addSubviews()
-        setupLayout()
-        setupViews()
-    }
 
     override open func viewDidLoad() {
         super.viewDidLoad()
+        addFormView()
         itemManager.topLevelItemViews.forEach(formView.appendItemView(_:))
         delegate?.viewDidLoad(viewController: self)
         
@@ -114,10 +81,12 @@ open class FormViewController: UIViewController, AdyenObserver, PreferredContent
 
     override open func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        resetForm()
+    }
 
-        if scrollEnabled {
-            resetForm()
-        }
+    @available(*, unavailable)
+    public required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override public var preferredContentSize: CGSize {
@@ -146,7 +115,7 @@ open class FormViewController: UIViewController, AdyenObserver, PreferredContent
             duration: 0.25,
             options: [.beginFromCurrentState, .layoutSubviews],
             animations: { [weak self] in
-                self?.scrollView.contentInset.bottom = bottomInset
+                self?.formView.contentInset.bottom = bottomInset
             }
         )
         view.adyen.animate(context: context)
@@ -241,35 +210,18 @@ open class FormViewController: UIViewController, AdyenObserver, PreferredContent
 
     // MARK: - Private
 
-    private func addSubviews() {
-        if scrollEnabled {
-            view.addSubview(scrollView)
-            scrollView.addSubview(formView)
-        } else {
-            view.addSubview(formView)
-        }
-    }
-
-    private func setupLayout() {
-        if scrollEnabled {
-            scrollView.adyen.anchor(inside: view.safeAreaLayoutGuide)
-
-            NSLayoutConstraint.activate([
-                formView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-                formView.leadingAnchor.constraint(equalTo: scrollView.layoutMarginsGuide.leadingAnchor),
-                formView.trailingAnchor.constraint(equalTo: scrollView.layoutMarginsGuide.trailingAnchor),
-                formView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
-            ])
-        } else {
-            formView.adyen.anchor(inside: view.safeAreaLayoutGuide)
-        }
-    }
-
-    private func setupViews() {
+    private func addFormView() {
+        view.addSubview(formView)
         view.backgroundColor = style.backgroundColor
         formView.backgroundColor = style.backgroundColor
-        formView.isEmbeddedInScrollView = scrollEnabled
+        formView.adyen.anchor(inside: view.safeAreaLayoutGuide)
     }
+
+    private lazy var formView: FormView = {
+        let form = FormView()
+        form.translatesAutoresizingMaskIntoConstraints = false
+        return form
+    }()
 
     // MARK: - UIResponder
 

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -19,7 +19,7 @@ public final class AdyenContext: PaymentAware {
     public private(set) var payment: Payment?
     
     @_spi(AdyenInternal)
-    public let analyticsProvider: AnyAnalyticsProvider?
+    public let analyticsProvider: AnalyticsProviderProtocol?
     
     // MARK: - Initializers
     
@@ -46,7 +46,7 @@ public final class AdyenContext: PaymentAware {
     internal init(
         apiContext: APIContext,
         payment: Payment?,
-        analyticsProvider: AnyAnalyticsProvider?
+        analyticsProvider: AnalyticsProviderProtocol?
     ) {
         self.apiContext = apiContext
         self.analyticsProvider = analyticsProvider
@@ -58,7 +58,7 @@ public final class AdyenContext: PaymentAware {
         self.payment = payment
     }
     
-    private static func createAnalyticsProvider(apiContext: APIContext, analyticsConfiguration: AnalyticsConfiguration) -> AnyAnalyticsProvider? {
+    private static func createAnalyticsProvider(apiContext: APIContext, analyticsConfiguration: AnalyticsConfiguration) -> AnalyticsProviderProtocol? {
         guard
             let analyticsEnvironment = (apiContext.environment as? Environment)?.toAnalyticsEnvironment(),
             let analyticsApiContext = try? APIContext(
@@ -67,22 +67,13 @@ public final class AdyenContext: PaymentAware {
             )
         else { return nil }
         
-        var eventAnalyticsProvider: AnyEventAnalyticsProvider?
-        
-        if analyticsConfiguration.isEnabled {
-            let eventDataSource = AnalyticsEventDataSource()
-            let syncEventDataSource = ThreadSafeAnalyticsEventDataSource(dataSource: eventDataSource)
-            eventAnalyticsProvider = EventAnalyticsProvider(
-                apiClient: APIClient(apiContext: analyticsApiContext),
-                context: analyticsConfiguration.context,
-                eventDataSource: syncEventDataSource
-            )
-        }
+        let eventDataSource = AnalyticsEventDataSource()
+        let syncEventDataSource = ThreadSafeAnalyticsEventDataSource(dataSource: eventDataSource)
         
         return AnalyticsProvider(
             apiClient: APIClient(apiContext: analyticsApiContext),
             configuration: analyticsConfiguration,
-            eventAnalyticsProvider: eventAnalyticsProvider
+            eventDataSource: syncEventDataSource
         )
     }
 }

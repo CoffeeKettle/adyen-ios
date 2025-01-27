@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -37,7 +37,6 @@ open class AbstractPersonalInformationComponent: PaymentComponent, PresentableCo
 
     internal lazy var formViewController: FormViewController = {
         let formViewController = FormViewController(
-            scrollEnabled: configuration.showsSubmitButton,
             style: configuration.style,
             localizationParameters: configuration.localizationParameters
         )
@@ -76,12 +75,9 @@ open class AbstractPersonalInformationComponent: PaymentComponent, PresentableCo
         fields.forEach { field in
             self.add(field, into: formViewController)
         }
-
-        if configuration.showsSubmitButton {
-            formViewController.append(FormSpacerItem())
-            formViewController.append(button)
-        }
-        formViewController.append(FormSpacerItem(numberOfSpaces: 4))
+        formViewController.append(FormSpacerItem())
+        formViewController.append(button)
+        formViewController.append(FormSpacerItem(numberOfSpaces: 2))
     }
 
     private func add(
@@ -285,18 +281,5 @@ extension AbstractPersonalInformationComponent: ViewControllerDelegate {
     public func viewDidLoad(viewController: UIViewController) {
         sendInitialAnalytics()
         sendDidLoadEvent()
-    }
-}
-
-// MARK: - SubmitCustomizable
-
-extension AbstractPersonalInformationComponent: SubmittableComponent {
-
-    public func submit() {
-        didSelectSubmitButton()
-    }
-
-    public func validate() -> Bool {
-        formViewController.validate()
     }
 }

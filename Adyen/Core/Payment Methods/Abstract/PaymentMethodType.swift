@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -37,17 +37,7 @@ public enum PaymentMethodType: RawRepresentable, Hashable, Codable {
     case econtextStores
     case econtextATM
     case econtextOnline
-    case boletoBancario
-    @available(
-        *,
-        deprecated,
-        renamed: "boletoBancarioSantander",
-        message: "Use 'boletoBancarioSantander' instead. Consider 'boletoBancario' as the default payment method for Boleto Bancario."
-    )
     case boleto
-    case boletoBancarioSantander
-    case boletoBancarioItau
-    case primeiroPayBoleto
     case affirm
     case oxxo
     case bacsDirectDebit
@@ -62,7 +52,6 @@ public enum PaymentMethodType: RawRepresentable, Hashable, Codable {
     case upi
     case cashAppPay
     case twint
-    case payByBankAISDD
     case other(String)
     
     // Unsupported
@@ -121,10 +110,7 @@ public enum PaymentMethodType: RawRepresentable, Hashable, Codable {
         case "econtext_stores": self = .econtextStores
         case "econtext_atm": self = .econtextATM
         case "econtext_online": self = .econtextOnline
-        case "boletobancario": self = .boletoBancario
-        case "boletobancario_itau": self = .boletoBancarioItau
-        case "boletobancario_santander": self = .boletoBancarioSantander
-        case "primeiropay_boleto": self = .primeiroPayBoleto
+        case "boletobancario_santander": self = .boleto
         case "affirm": self = .affirm
         case "oxxo": self = .oxxo
         case "directdebit_GB": self = .bacsDirectDebit
@@ -143,7 +129,6 @@ public enum PaymentMethodType: RawRepresentable, Hashable, Codable {
         case "cashapp": self = .cashAppPay
         case "bizum": self = .bizum
         case "twint": self = .twint
-        case "paybybank_AIS_DD": self = .payByBankAISDD
         default: self = .other(rawValue)
         }
     }
@@ -187,11 +172,7 @@ public enum PaymentMethodType: RawRepresentable, Hashable, Codable {
         case .econtextStores: return "econtext_stores"
         case .econtextATM: return "econtext_atm"
         case .econtextOnline: return "econtext_online"
-        case .boletoBancario: return "boletobancario"
         case .boleto: return "boletobancario_santander"
-        case .boletoBancarioSantander: return "boletobancario_santander"
-        case .boletoBancarioItau: return "boletobancario_itau"
-        case .primeiroPayBoleto: return "primeiropay_boleto"
         case .affirm: return "affirm"
         case .oxxo: return "oxxo"
         case .bacsDirectDebit: return "directdebit_GB"
@@ -210,7 +191,6 @@ public enum PaymentMethodType: RawRepresentable, Hashable, Codable {
         case .cashAppPay: return "cashapp"
         case .bizum: return "bizum"
         case .twint: return "twint"
-        case .payByBankAISDD: return "paybybank_AIS_DD"
         case let .other(value): return value
         }
     }
@@ -261,11 +241,7 @@ extension PaymentMethodType {
         case .econtextStores: return "econtext stores"
         case .econtextATM: return "econtext ATM"
         case .econtextOnline: return "econtext online"
-        case .boletoBancario: return "boleto bancario"
-        case .boleto: return "boleto bancario santander"
-        case .boletoBancarioSantander: return "boleto bancario santander"
-        case .boletoBancarioItau: return "boleto bancario itau"
-        case .primeiroPayBoleto: return "primeiro pay boleto"
+        case .boleto: return "boleto"
         case .affirm: return "affirm"
         case .oxxo: return "OXXO"
         case .bacsDirectDebit: return "BACS direct debit"
@@ -284,7 +260,6 @@ extension PaymentMethodType {
         case .cashAppPay: return "cash app"
         case .bizum: return "bizum"
         case .twint: return "twint"
-        case .payByBankAISDD: return "Pay By Bank Direct Debit"
         case let .other(name): return name.replacingOccurrences(of: "_", with: " ")
         }
     }

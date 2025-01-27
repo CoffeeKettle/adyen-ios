@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -68,7 +68,6 @@ public final class BACSDirectDebitComponent: PaymentComponent, PaymentAware, Pre
         self.configuration = configuration
         self.inputFormViewController = BACSInputFormViewController(
             title: paymentMethod.name,
-            scrollEnabled: configuration.showsSubmitButton,
             styleProvider: configuration.style
         )
         self.viewController = SecuredViewController(
@@ -133,7 +132,6 @@ extension BACSDirectDebitComponent: BACSDirectDebitRouterProtocol {
     private func assembleConfirmationView(with data: BACSDirectDebitData) -> UIViewController {
         let confirmationViewController = BACSConfirmationViewController(
             title: paymentMethod.name,
-            scrollEnabled: configuration.showsSubmitButton,
             styleProvider: configuration.style,
             localizationParameters: configuration.localizationParameters
         )

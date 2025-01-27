@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -9,7 +9,7 @@ import UIKit
 @_spi(AdyenInternal) import Adyen
 
 extension UIImageView {
-    convenience init(infoImageStyle: ImageStyle) {
+    convenience init(infoImageStyle: ImageStyle, scopedInstance: Any) {
         self.init(style: infoImageStyle)
         self.accessibilityIdentifier = ViewIdentifierBuilder.build(scopeInstance: self, postfix: "infoImage")
         self.translatesAutoresizingMaskIntoConstraints = false

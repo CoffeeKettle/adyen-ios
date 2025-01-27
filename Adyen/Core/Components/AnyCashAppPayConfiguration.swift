@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -8,7 +8,7 @@ import Foundation
 
 /// Describes any configuration for the Cash App Pay component.
 public protocol AnyCashAppPayConfiguration {
-
+    
     /// The URL for Cash App to call in order to redirect back to your application.
     var redirectURL: URL { get }
 

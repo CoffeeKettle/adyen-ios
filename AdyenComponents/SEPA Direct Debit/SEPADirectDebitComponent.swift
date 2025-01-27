@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -59,12 +59,11 @@ public final class SEPADirectDebitComponent: PaymentComponent, PaymentAware, Pre
         button.showsActivityIndicator = false
         formViewController.view.isUserInteractionEnabled = true
     }
-
+    
     // MARK: - View Controller
     
     private lazy var formViewController: FormViewController = {
         let formViewController = FormViewController(
-            scrollEnabled: configuration.showsSubmitButton,
             style: configuration.style,
             localizationParameters: configuration.localizationParameters
         )
@@ -73,10 +72,7 @@ public final class SEPADirectDebitComponent: PaymentComponent, PaymentAware, Pre
         formViewController.title = paymentMethod.displayInformation(using: configuration.localizationParameters).title
         formViewController.append(nameItem)
         formViewController.append(ibanItem)
-
-        if configuration.showsSubmitButton {
-            formViewController.append(button)
-        }
+        formViewController.append(button)
 
         return formViewController
     }()
@@ -84,7 +80,7 @@ public final class SEPADirectDebitComponent: PaymentComponent, PaymentAware, Pre
     // MARK: - Private
     
     private func didSelectSubmitButton() {
-        guard validate() else {
+        guard formViewController.validate() else {
             return
         }
         
@@ -153,16 +149,3 @@ extension SEPADirectDebitComponent: TrackableComponent {}
 
 @_spi(AdyenInternal)
 extension SEPADirectDebitComponent: ViewControllerDelegate {}
-
-// MARK: - SubmitCustomizable
-
-extension SEPADirectDebitComponent: SubmittableComponent {
-
-    public func submit() {
-        didSelectSubmitButton()
-    }
-
-    public func validate() -> Bool {
-        formViewController.validate()
-    }
-}

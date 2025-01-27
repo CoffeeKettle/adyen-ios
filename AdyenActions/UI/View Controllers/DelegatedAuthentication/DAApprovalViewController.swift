@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -35,7 +35,7 @@ internal final class DAApprovalViewController: UIViewController {
         )
         let cancelAction = UIAlertAction(
             title: localizedString(.threeds2DAApprovalRemoveAlertNegativeButton, localizationParameters),
-            style: .cancel,
+            style: .default,
             handler: nil
         )
         alertController.addAction(cancelAction)
@@ -170,12 +170,15 @@ internal final class DAApprovalViewController: UIViewController {
 
 @available(iOS 16.0, *)
 extension DAApprovalViewController: DelegatedAuthenticationViewDelegate {
+    internal func removeCredential() {
+        present(removeCredentialAlert, animated: true)
+    }
+    
     internal func firstButtonTapped() {
         useBiometricsHandler()
     }
     
     internal func secondButtonTapped() {
-        actionSheet.popoverPresentationController?.sourceView = approvalView.secondButton
         present(actionSheet, animated: true)
     }
 }

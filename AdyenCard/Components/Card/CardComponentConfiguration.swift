@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -120,10 +120,7 @@ extension CardComponent {
 
         /// Describes the component's UI style.
         public var style: FormComponentStyle
-
-        /// A boolean value that determines whether the payment button is displayed. Defaults to `true`.
-        internal let showsSubmitButton: Bool
-
+        
         /// The shopper's information to be prefilled.
         public var shopperInformation: PrefilledShopperInformation?
         
@@ -169,8 +166,6 @@ extension CardComponent {
         /// Configuration of Card component.
         /// - Parameters:
         ///   - style: The component's UI style.
-        ///   - showsSubmitButton: Boolean value that determines whether the payment button is displayed.
-        ///   Defaults to `true`.
         ///   - shopperInformation: The shopper's information to be prefilled.
         ///   - localizationParameters: Localization parameters.
         ///   - showsHolderNameField: Indicates if the field for entering the holder name should be displayed in the form.
@@ -188,7 +183,6 @@ extension CardComponent {
         ///   - billingAddress: Billing address fields configurations.
         public init(
             style: FormComponentStyle = FormComponentStyle(),
-            showsSubmitButton: Bool = true,
             shopperInformation: PrefilledShopperInformation? = nil,
             localizationParameters: LocalizationParameters? = nil,
             showsHolderNameField: Bool = false,
@@ -202,7 +196,6 @@ extension CardComponent {
             billingAddress: BillingAddressConfiguration = .init()
         ) {
             self.style = style
-            self.showsSubmitButton = showsSubmitButton
             self.shopperInformation = shopperInformation
             self.localizationParameters = localizationParameters
             self.showsHolderNameField = showsHolderNameField

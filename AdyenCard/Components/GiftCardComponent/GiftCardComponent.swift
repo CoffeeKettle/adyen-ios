@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -47,9 +47,6 @@ public final class GiftCardComponent: PresentableComponent,
     /// Describes the component's UI style.
     public let style: FormComponentStyle
 
-    /// A boolean value that determines whether the payment button is displayed. Defaults to `true`.
-    internal let showsSubmitButton: Bool
-
     /// The delegate of the component.
     public weak var delegate: PaymentComponentDelegate?
 
@@ -72,15 +69,12 @@ public final class GiftCardComponent: PresentableComponent,
     ///   - context:The context object for this component.
     ///   - amount: The amount to pay.
     ///   - style: The Component's UI style.
-    ///   - showsSubmitButton: Boolean value that determines whether the payment button is displayed.
-    ///   Defaults to `true`.
     ///   - showsSecurityCodeField: Indicates whether to show the security code field at all.
     public convenience init(
         paymentMethod: GiftCardPaymentMethod,
         context: AdyenContext,
         amount: Amount,
         style: FormComponentStyle = FormComponentStyle(),
-        showsSubmitButton: Bool = true,
         showsSecurityCodeField: Bool = true
     ) {
         self.init(
@@ -88,7 +82,6 @@ public final class GiftCardComponent: PresentableComponent,
             context: context,
             amount: amount,
             style: style,
-            showsSubmitButton: showsSubmitButton,
             showsSecurityCodeField: showsSecurityCodeField,
             publicKeyProvider: PublicKeyProvider(apiContext: context.apiContext)
         )
@@ -101,15 +94,12 @@ public final class GiftCardComponent: PresentableComponent,
     ///   - context:The context object for this component.
     ///   - amount: The amount to pay.
     ///   - style: The Component's UI style.
-    ///   - showsSubmitButton: Boolean value that determines whether the payment button is displayed.
-    ///   Defaults to `true`.
     ///   - showsSecurityCodeField: Indicates whether to show the security code field at all.
     public convenience init(
         paymentMethod: MealVoucherPaymentMethod,
         context: AdyenContext,
         amount: Amount,
         style: FormComponentStyle = FormComponentStyle(),
-        showsSubmitButton: Bool = true,
         showsSecurityCodeField: Bool = true
     ) {
         self.init(
@@ -117,7 +107,6 @@ public final class GiftCardComponent: PresentableComponent,
             context: context,
             amount: amount,
             style: style,
-            showsSubmitButton: showsSubmitButton,
             showsSecurityCodeField: showsSecurityCodeField,
             publicKeyProvider: PublicKeyProvider(apiContext: context.apiContext)
         )
@@ -128,14 +117,12 @@ public final class GiftCardComponent: PresentableComponent,
         context: AdyenContext,
         amount: Amount,
         style: FormComponentStyle = FormComponentStyle(),
-        showsSubmitButton: Bool = true,
         showsSecurityCodeField: Bool = true,
         publicKeyProvider: AnyPublicKeyProvider
     ) {
         self.partialPaymentMethodType = partialPaymentMethodType
         self.context = context
         self.style = style
-        self.showsSubmitButton = showsSubmitButton
         self.showsSecurityCodeField = showsSecurityCodeField
         self.publicKeyProvider = publicKeyProvider
         self.amount = amount
@@ -150,7 +137,6 @@ public final class GiftCardComponent: PresentableComponent,
     private lazy var formViewController: FormViewController = {
 
         let formViewController = FormViewController(
-            scrollEnabled: showsSubmitButton,
             style: style,
             localizationParameters: localizationParameters
         )
@@ -176,12 +162,8 @@ public final class GiftCardComponent: PresentableComponent,
         }
         
         formViewController.append(FormSpacerItem())
-
-        if showsSubmitButton {
-            formViewController.append(button)
-            formViewController.append(FormSpacerItem(numberOfSpaces: 2))
-        }
-
+        formViewController.append(button)
+        formViewController.append(FormSpacerItem(numberOfSpaces: 2))
         return formViewController
     }()
 
@@ -276,7 +258,7 @@ extension GiftCardComponent {
     
     internal func didSelectSubmitButton() {
         hideError()
-        guard validate() else {
+        guard formViewController.validate() else {
             return
         }
 
@@ -462,36 +444,16 @@ extension GiftCardComponent {
                 storePaymentMethod: false
             ))
         } catch {
-            sendEncryptionErrorEvent()
             return .failure(error)
         }
     }
-    
-    private func sendEncryptionErrorEvent() {
-        var errorEvent = AnalyticsEventError(
-            component: paymentMethod.type.rawValue,
-            type: .internal
-        )
-        errorEvent.code = AnalyticsConstants.ErrorCode.encryptionError.stringValue
-        context.analyticsProvider?.add(error: errorEvent)
-    }
 }
+
+@_spi(AdyenInternal)
+extension GiftCardComponent: PaymentComponent {}
 
 @_spi(AdyenInternal)
 extension GiftCardComponent: PartialPaymentComponent {}
 
 @_spi(AdyenInternal)
 extension GiftCardComponent: PublicKeyConsumer {}
-
-// MARK: - SubmitCustomizable
-
-extension GiftCardComponent: SubmittableComponent {
-
-    public func submit() {
-        didSelectSubmitButton()
-    }
-
-    public func validate() -> Bool {
-        formViewController.validate()
-    }
-}

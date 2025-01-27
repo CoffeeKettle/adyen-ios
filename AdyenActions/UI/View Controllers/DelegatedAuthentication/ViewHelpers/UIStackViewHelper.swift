@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -16,7 +16,8 @@ extension UIStackView {
         alignment: UIStackView.Alignment = .fill,
         spacing: CGFloat,
         view: UIView,
-        withBackground: Bool = false
+        withBackground: Bool = false,
+        scopedInstance: Any
     ) {
         self.init(arrangedSubviews: arrangedSubviews)
         self.axis = axis
@@ -33,7 +34,6 @@ extension UIStackView {
             subView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             self.insertSubview(subView, at: 0)
             subView.layer.cornerRadius = 10.0
-            self.layer.cornerRadius = 10.0
             subView.layer.masksToBounds = true
             subView.clipsToBounds = true
         }

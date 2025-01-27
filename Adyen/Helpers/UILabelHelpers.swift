@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -27,8 +27,7 @@ public extension AdyenScope where Base: UILabel {
     /// Applies given `TextStyle` to the UILabel
     /// Sets `adjustsFontForContentSizeCategory` to `true`
     /// - Parameter style: `TextStyle` to be applied
-    @_spi(AdyenInternal)
-    func apply(_ style: TextStyle) {
+    internal func apply(_ style: TextStyle) {
         base.font = style.font
         base.textColor = style.color
         base.textAlignment = style.textAlignment

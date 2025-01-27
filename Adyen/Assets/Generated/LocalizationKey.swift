@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -356,14 +356,6 @@ public struct LocalizationKey {
     public static let paybybankTitle = LocalizationKey(key: "adyen.paybybank.title")
     /// Search…
     public static let searchPlaceholder = LocalizationKey(key: "adyen.search.placeholder")
-    /// Use Pay by Bank to pay instantly from any bank account.
-    public static let payByBankAISDDDisclaimerHeader = LocalizationKey(key: "adyen.payByBankAISDD.disclaimer.header")
-    /// By connecting your bank account you are authorizing debits to your account for any amount owed for use of our services and/or purchase of our products, until this authorization is revoked.
-    public static let payByBankAISDDDisclaimerBody = LocalizationKey(key: "adyen.payByBankAISDD.disclaimer.body")
-    /// Continue to Pay by Bank
-    public static let payByBankAISDDSubmit = LocalizationKey(key: "adyen.payByBankAISDD.submit")
-    /// + more
-    public static let payByBankAISDDMore = LocalizationKey(key: "adyen.payByBankAISDD.more")
     /// How would you like to use UPI?
     public static let upiModeSelection = LocalizationKey(key: "adyen.upi.modeSelection")
     /// Enter a correct virtual payment address
@@ -406,13 +398,13 @@ public struct LocalizationKey {
     public static let threeds2DATouchID = LocalizationKey(key: "adyen.threeds2.DA.touchID")
     /// OpticID
     public static let threeds2DAOpticID = LocalizationKey(key: "adyen.threeds2.DA.opticID")
-    /// Check out faster next time with this card
+    /// You can check out faster next time with this card
     public static let threeds2DARegistrationDescription = LocalizationKey(key: "adyen.threeds2.DA.registration.description")
-    /// Skip manual entry & speed up checkout
+    /// Enjoy a faster checkout process.
     public static let threeds2DARegistrationFirstInfo = LocalizationKey(key: "adyen.threeds2.DA.registration.firstInfo")
-    /// Pay with Face ID or passcode
+    /// Use %@ and Passcode to approve payments.
     public static let threeds2DARegistrationSecondInfo = LocalizationKey(key: "adyen.threeds2.DA.registration.secondInfo")
-    /// Edit or remove your details at any time.
+    /// Remove your credentials at any time.
     public static let threeds2DARegistrationThirdInfo = LocalizationKey(key: "adyen.threeds2.DA.registration.thirdInfo")
     /// Use secure checkout
     public static let threeds2DARegistrationPositiveButton = LocalizationKey(key: "adyen.threeds2.DA.registration.positiveButton")
@@ -434,7 +426,7 @@ public struct LocalizationKey {
     public static let threeds2DAApprovalActionSheetRemove = LocalizationKey(key: "adyen.threeds2.DA.approval.actionSheet.remove")
     /// Remove credentials
     public static let threeds2DAApprovalRemoveAlertTitle = LocalizationKey(key: "adyen.threeds2.DA.approval.remove.alert.title")
-    /// Are you sure you want to remove your Secure Checkout credentials?
+    /// Are you sure that you want to remove your Secure Checkout credentials?
     public static let threeds2DAApprovalRemoveAlertDescription = LocalizationKey(key: "adyen.threeds2.DA.approval.remove.alert.description")
     /// Remove
     public static let threeds2DAApprovalRemoveAlertPositiveButton = LocalizationKey(key: "adyen.threeds2.DA.approval.remove.alert.positiveButton")
@@ -442,24 +434,10 @@ public struct LocalizationKey {
     public static let threeds2DAApprovalRemoveAlertNegativeButton = LocalizationKey(key: "adyen.threeds2.DA.approval.remove.alert.negativeButton")
     /// Authenticating…
     public static let threeds2DAApprovalErrorTitle = LocalizationKey(key: "adyen.threeds2.DA.approval.error.title")
-    /// Couldn’t approve payment with Secure Checkout
+    /// Authentication with Secure Checkout has failed, please attempt an alternative authentication.
     public static let threeds2DAApprovalErrorMessage = LocalizationKey(key: "adyen.threeds2.DA.approval.error.message")
-    /// Approve differently
+    /// Approve the transaction
     public static let threeds2DAApprovalErrorButtonTitle = LocalizationKey(key: "adyen.threeds2.DA.approval.error.buttonTitle")
-    /// Troubleshooting
-    public static let threeds2DAErrorTroubleshootingTitle = LocalizationKey(key: "adyen.threeds2.DA.error.troubleshootingTitle")
-    /// Ongoing payment issues may be resolved by resetting your Secure Checkout details.
-    public static let threeds2DAErrorTroubleshootingDescription = LocalizationKey(key: "adyen.threeds2.DA.error.troubleshootingDescription")
-    /// Reset Secure Checkout
-    public static let threeds2DAErrorTroubleshootingButtonTitle = LocalizationKey(key: "adyen.threeds2.DA.error.troubleshootingButtonTitle")
-    /// Reset Secure Checkout
-    public static let threeds2DAErrorResetAlertTitle = LocalizationKey(key: "adyen.threeds2.DA.error.reset.alert.title")
-    /// You will be redirected to complete this payment in a different way
-    public static let threeds2DAErrorResetAlertDescription = LocalizationKey(key: "adyen.threeds2.DA.error.reset.alert.description")
-    /// Reset
-    public static let threeds2DAErrorResetAlertPositiveButton = LocalizationKey(key: "adyen.threeds2.DA.error.reset.alert.positiveButton")
-    /// Cancel
-    public static let threeds2DAErrorResetAlertNegativeButton = LocalizationKey(key: "adyen.threeds2.DA.error.reset.alert.negativeButton")
     /// Let’s try next time!
     public static let threeds2DARegistrationErrorTitle = LocalizationKey(key: "adyen.threeds2.DA.registration.error.title")
     /// Your payment has still been authenticated successfully but the Secure Checkout service was unavailable.

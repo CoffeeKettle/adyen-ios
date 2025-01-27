@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -71,7 +71,6 @@ extension VoucherComponent: VoucherViewDelegate, DocumentActionViewDelegate {
         )
         createAlertActions(for: action, sourceView: sourceView).forEach { alert.addAction($0) }
         
-        alert.popoverPresentationController?.sourceView = sourceView
         presenterViewController.present(alert, animated: true, completion: nil)
     }
     
@@ -86,7 +85,9 @@ extension VoucherComponent: VoucherViewDelegate, DocumentActionViewDelegate {
         ].compactMap { $0 }
     }
     
-    private func createSaveAlertAction(for action: VoucherAction, sourceView: UIView) -> UIAlertAction {
+    private func createSaveAlertAction(for action: VoucherAction, sourceView: UIView) -> UIAlertAction? {
+        guard canAddPasses(action: action.anyAction) else { return nil }
+        
         if let downloadable = action.anyAction as? Downloadable {
             return createDownloadPDFAlertAction(for: downloadable.downloadUrl, sourceView: sourceView)
         } else {

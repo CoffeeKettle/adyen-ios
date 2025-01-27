@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -174,7 +174,7 @@ extension IssuerListComponent {
         
         /// The UI style of the component.
         public var style: ListComponentStyle
-
+        
         public var localizationParameters: LocalizationParameters?
         
         /// Initializes the configuration for Issuer list type components.

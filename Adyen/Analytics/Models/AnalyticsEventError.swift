@@ -16,7 +16,7 @@ public struct AnalyticsEventError: AnalyticsEvent {
      
     public var component: String
     
-    public var errorType: ErrorType
+    public var type: ErrorType
     
     public var code: String?
     
@@ -30,12 +30,10 @@ public struct AnalyticsEventError: AnalyticsEvent {
         case sdk = "SdkError"
         case thirdParty = "ThirdParty"
         case generic = "Generic"
-        case redirect = "Redirect"
-        case threeDS2 = "ThreeDS2"
     }
     
     public init(component: String, type: ErrorType) {
         self.component = component
-        self.errorType = type
+        self.type = type
     }
 }

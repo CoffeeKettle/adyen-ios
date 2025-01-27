@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2021 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -25,8 +25,7 @@ public extension AdyenScope where Base: UIImageView {
     /// Applies given `ImageStyle` to the UIImageView
     /// Sets `translatesAutoresizingMaskIntoConstraints` to `false`
     /// - Parameter style: `ImageStyle` to be applied
-    @_spi(AdyenInternal)
-    func apply(_ style: ImageStyle) {
+    internal func apply(_ style: ImageStyle) {
         round(using: style.cornerRounding)
         base.layer.borderColor = style.borderColor?.cgColor
         base.layer.borderWidth = style.borderWidth

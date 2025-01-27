@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2023 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -72,22 +72,5 @@ public struct AdditionalAnalyticsFields {
     public init(amount: Amount?, sessionId: String?) {
         self.amount = amount
         self.sessionId = sessionId
-    }
-}
-
-/// Describes the levels that determine which analytics calls are made.
-internal enum AnalyticsLevel: String, Encodable {
-    
-    /// Indicates all analytics are enabled.
-    case all
-    
-    /// Indicates only the initial call is enabled.
-    case initial
-}
-
-extension AnalyticsConfiguration {
-    
-    internal var analyticsLevel: AnalyticsLevel {
-        isEnabled ? .all : .initial
     }
 }

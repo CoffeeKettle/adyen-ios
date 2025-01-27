@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2020 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -56,7 +56,6 @@ public final class BLIKComponent: PaymentComponent, PresentableComponent, Paymen
 
     private lazy var formViewController: FormViewController = {
         let formViewController = FormViewController(
-            scrollEnabled: configuration.showsSubmitButton,
             style: configuration.style,
             localizationParameters: configuration.localizationParameters
         )
@@ -69,11 +68,8 @@ public final class BLIKComponent: PaymentComponent, PresentableComponent, Paymen
         formViewController.append(FormSpacerItem())
         formViewController.append(codeItem)
         formViewController.append(FormSpacerItem())
-
-        if configuration.showsSubmitButton {
-            formViewController.append(button)
-            formViewController.append(FormSpacerItem(numberOfSpaces: 2))
-        }
+        formViewController.append(button)
+        formViewController.append(FormSpacerItem(numberOfSpaces: 2))
 
         return formViewController
     }()
@@ -119,7 +115,7 @@ public final class BLIKComponent: PaymentComponent, PresentableComponent, Paymen
     // MARK: - Private
 
     private func didSelectSubmitButton() {
-        guard validate() else { return }
+        guard formViewController.validate() else { return }
 
         let details = BLIKDetails(
             paymentMethod: paymentMethod,
@@ -137,16 +133,3 @@ extension BLIKComponent: TrackableComponent {}
 
 @_spi(AdyenInternal)
 extension BLIKComponent: ViewControllerDelegate {}
-
-// MARK: - SubmitCustomizable
-
-extension BLIKComponent: SubmittableComponent {
-
-    public func submit() {
-        didSelectSubmitButton()
-    }
-
-    public func validate() -> Bool {
-        formViewController.validate()
-    }
-}

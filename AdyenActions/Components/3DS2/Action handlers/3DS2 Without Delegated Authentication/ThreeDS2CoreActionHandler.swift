@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -80,18 +80,17 @@ internal class ThreeDS2CoreActionHandler: AnyThreeDS2CoreActionHandler {
         completionHandler: @escaping (Result<String, Error>) -> Void
     ) {
         Analytics.sendEvent(event)
-        sendLogEvent(.fingerprintSent, for: Constants.fingerprintEvent)
+        sendFingerPrintEvent(.fingerprintSent)
         
         createFingerprint(fingerprintAction) { [weak self] result in
             guard let self else { return }
             
-            self.sendLogEvent(.fingerprintComplete, for: Constants.fingerprintEvent)
+            self.sendFingerPrintEvent(.fingerprintComplete)
             
             switch result {
             case let .success(encodedFingerprint):
                 completionHandler(.success(encodedFingerprint))
             case let .failure(error):
-                sendErrorEvent(.threeDS2FingerprintHandlingFailed, for: Constants.fingerprintEvent)
                 self.didFail(with: error, completionHandler: completionHandler)
             }
         }
@@ -117,7 +116,6 @@ internal class ThreeDS2CoreActionHandler: AnyThreeDS2CoreActionHandler {
                 )
             }
         } catch {
-            sendErrorEvent(.threeDS2DecodingFailed, for: Constants.fingerprintEvent)
             didFail(with: error, completionHandler: completionHandler)
         }
     }
@@ -135,15 +133,12 @@ internal class ThreeDS2CoreActionHandler: AnyThreeDS2CoreActionHandler {
                 completionHandler(.success(encodedFingerprint))
 
             case let .failure(error):
-                sendErrorEvent(.threeDS2TransactionCreationFailed, for: Constants.fingerprintEvent)
-                
                 let encodedError = try AdyenCoder.encodeBase64(ThreeDS2Component.Fingerprint(
                     threeDS2SDKError: error.base64Representation())
                 )
                 completionHandler(.success(encodedError))
             }
         } catch {
-            sendErrorEvent(.threeDS2FingerprintCreationFailed, for: Constants.fingerprintEvent)
             didFail(with: error, completionHandler: completionHandler)
         }
     }
@@ -170,19 +165,17 @@ internal class ThreeDS2CoreActionHandler: AnyThreeDS2CoreActionHandler {
         completionHandler: @escaping (Result<ThreeDSResult, Error>) -> Void
     ) {
         guard let transaction else {
-            sendErrorEvent(.threeDS2TransactionMissing, for: Constants.challengeEvent)
             return didFail(with: ThreeDS2Component.Error.missingTransaction, completionHandler: completionHandler)
         }
 
         Analytics.sendEvent(event)
         
-        sendLogEvent(.challengeDataSent, for: Constants.challengeEvent)
+        sendChallengeEvent(.challengeDataSent)
 
         let token: ThreeDS2Component.ChallengeToken
         do {
             token = try AdyenCoder.decodeBase64(challengeAction.challengeToken) as ThreeDS2Component.ChallengeToken
         } catch {
-            sendErrorEvent(.threeDS2DecodingFailed, for: Constants.challengeEvent)
             return didFail(with: error, completionHandler: completionHandler)
         }
 
@@ -191,12 +184,12 @@ internal class ThreeDS2CoreActionHandler: AnyThreeDS2CoreActionHandler {
             threeDSRequestorAppURL: threeDSRequestorAppURL ?? token.threeDSRequestorAppURL
         )
         
-        sendLogEvent(.challengeDisplayed, for: Constants.challengeEvent)
+        sendChallengeEvent(.challengeDisplayed)
         
         transaction.performChallenge(with: challengeParameters) { [weak self] challengeResult, error in
             guard let self else { return }
             
-            self.sendLogEvent(.challengeComplete, for: Constants.challengeEvent)
+            self.sendChallengeEvent(.challengeComplete)
             
             guard let result = challengeResult else {
                 self.didReceiveErrorOnChallenge(error: error, challengeAction: challengeAction, completionHandler: completionHandler)
@@ -212,6 +205,7 @@ internal class ThreeDS2CoreActionHandler: AnyThreeDS2CoreActionHandler {
     }
     
     /// Invoked to handle the error flow of a challenge handling by the 3ds2sdk.
+    /// For challenge cancelled we return the control back to the merchant immediately as an error.
     private func didReceiveErrorOnChallenge(
         error: Error?,
         challengeAction: ThreeDS2ChallengeAction,
@@ -226,19 +220,17 @@ internal class ThreeDS2CoreActionHandler: AnyThreeDS2CoreActionHandler {
         }
         switch (error.domain, error.code) {
         case (ADYRuntimeErrorDomain, Int(ADYRuntimeErrorCode.challengeCancelled.rawValue)):
-            sendErrorEvent(
-                .threeDS2ChallengeHandlingFailed,
-                for: Constants.challengeEvent,
-                message: "cancelled"
+            didFail(
+                with: error,
+                completionHandler: completionHandler
             )
         default:
-            sendErrorEvent(.threeDS2ChallengeHandlingFailed, for: Constants.challengeEvent)
+            didFinish(
+                threeDS2SDKError: error.base64Representation(),
+                authorizationToken: challengeAction.authorisationToken,
+                completionHandler: completionHandler
+            )
         }
-        didFinish(
-            threeDS2SDKError: error.base64Representation(),
-            authorizationToken: challengeAction.authorisationToken,
-            completionHandler: completionHandler
-        )
     }
     
     private func didFinish(
@@ -291,20 +283,22 @@ internal class ThreeDS2CoreActionHandler: AnyThreeDS2CoreActionHandler {
     
     // MARK: - Events {
     
-    private func sendLogEvent(_ subtype: AnalyticsEventLog.LogSubType, for component: String) {
+    private func sendFingerPrintEvent(_ subtype: AnalyticsEventLog.LogSubType) {
         let logEvent = AnalyticsEventLog(
-            component: component,
+            component: Constants.fingerprintEvent,
             type: .threeDS2,
             subType: subtype
         )
         context.analyticsProvider?.add(log: logEvent)
     }
     
-    private func sendErrorEvent(_ code: AnalyticsConstants.ErrorCode, for component: String, message: String? = nil) {
-        var errorEvent = AnalyticsEventError(component: component, type: .threeDS2)
-        errorEvent.code = code.stringValue
-        errorEvent.message = message
-        context.analyticsProvider?.add(error: errorEvent)
+    private func sendChallengeEvent(_ subtype: AnalyticsEventLog.LogSubType) {
+        let logEvent = AnalyticsEventLog(
+            component: Constants.challengeEvent,
+            type: .threeDS2,
+            subType: subtype
+        )
+        context.analyticsProvider?.add(log: logEvent)
     }
 }
 

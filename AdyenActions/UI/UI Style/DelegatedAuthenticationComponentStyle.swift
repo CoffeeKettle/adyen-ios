@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2025 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -100,31 +100,7 @@ public struct DelegatedAuthenticationComponentStyle {
         color: UIColor.Adyen.componentSecondaryLabel,
         textAlignment: .center
     )
-    
-    /// The title style for the troubleshooting message
-    public var troubleshootingTitleStyle = TextStyle(
-        font: .preferredFont(forTextStyle: .subheadline),
-        color: UIColor.Adyen.componentLabel,
-        textAlignment: .center
-    )
-    
-    /// The description style for the troubleshooting message
-    public var troubleshootingDescriptionStyle = TextStyle(
-        font: .preferredFont(forTextStyle: .caption1),
-        color: UIColor.Adyen.componentSecondaryLabel,
-        textAlignment: .center
-    )
-    
-    /// The button style for the troubleshooting message
-    public var troubleshootingButtonStyle = ButtonStyle(
-        title: TextStyle(
-            font: .preferredFont(forTextStyle: .headline),
-            color: UIColor.Adyen.defaultBlue
-        ),
-        cornerRadius: 8,
-        background: .clear
-    )
-
+        
     /// The primary button style for the register & approve screens.
     public var primaryButton = ButtonStyle(
         title: TextStyle(

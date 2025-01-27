@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2022 Adyen N.V.
+// Copyright (c) 2024 Adyen N.V.
 //
 // This file is open source and available under the MIT license. See the LICENSE file for more info.
 //
@@ -127,7 +127,7 @@ public final class OnlineBankingComponent: PaymentComponent,
     // MARK: - Private
 
     private func didSelectContinueButton() {
-        guard validate() else { return }
+        guard formViewController.validate() else { return }
 
         let details = OnlineBankingDetails(
             paymentMethod: paymentMethod,
@@ -141,7 +141,6 @@ public final class OnlineBankingComponent: PaymentComponent,
 
     private lazy var formViewController: FormViewController = {
         let formViewController = FormViewController(
-            scrollEnabled: configuration.showsSubmitButton,
             style: configuration.style,
             localizationParameters: configuration.localizationParameters
         )
@@ -151,11 +150,8 @@ public final class OnlineBankingComponent: PaymentComponent,
         formViewController.append(FormSpacerItem(numberOfSpaces: 4))
         formViewController.append(termsAndConditionsLabelItem.padding())
         formViewController.append(FormSpacerItem())
-
-        if configuration.showsSubmitButton {
-            formViewController.append(continueButton)
-            formViewController.append(FormSpacerItem(numberOfSpaces: 2))
-        }
+        formViewController.append(continueButton)
+        formViewController.append(FormSpacerItem(numberOfSpaces: 2))
 
         return formViewController
     }()
@@ -164,16 +160,3 @@ public final class OnlineBankingComponent: PaymentComponent,
 
 @_spi(AdyenInternal)
 extension OnlineBankingComponent: AdyenObserver {}
-
-// MARK: - SubmitCustomizable
-
-extension OnlineBankingComponent: SubmittableComponent {
-
-    public func submit() {
-        didSelectContinueButton()
-    }
-
-    public func validate() -> Bool {
-        formViewController.validate()
-    }
-}
