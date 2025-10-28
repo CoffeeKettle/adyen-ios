@@ -39,14 +39,6 @@ let package = Package(
     ],
     dependencies: [
         .package(
-            url: "https://github.com/Adyen/adyen-3ds2-ios",
-            exact: "2.4.3"
-        ),
-        .package(
-            url: "https://github.com/Adyen/adyen-authentication-ios",
-            exact: "3.1.0"
-        ),
-        .package(
             url: "https://github.com/Adyen/adyen-networking-ios",
             exact: "3.0.1"
         ),
@@ -60,6 +52,10 @@ let package = Package(
         )
     ],
     targets: [
+        .binaryTarget(
+            name: "Adyen3DS2",
+            path: "XCFramework/Static/Adyen3DS2.xcframework"
+        ),
         .target(
             name: "Adyen",
             dependencies: [.product(name: "AdyenNetworking", package: "adyen-networking-ios")],
@@ -79,7 +75,7 @@ let package = Package(
             name: "AdyenActions",
             dependencies: [
                 .target(name: "Adyen"),
-                .product(name: "Adyen3DS2", package: "adyen-3ds2-ios")
+                .target(name: "Adyen3DS2")
             ],
             path: "AdyenActions",
             exclude: [
