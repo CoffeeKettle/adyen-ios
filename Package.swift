@@ -43,10 +43,6 @@ let package = Package(
         .library(
             name: "AdyenTwint",
             targets: ["AdyenTwint"]
-        ),
-        .library(
-            name: "AdyenDelegatedAuthentication",
-            targets: ["AdyenDelegatedAuthentication"]
         )
     ],
     dependencies: [
@@ -155,12 +151,6 @@ let package = Package(
         .binaryTarget(
             name: "TwintSDK",
             path: "XCFramework/Dynamic/TwintSDK.xcframework"
-        ),
-        .target(
-            name: "AdyenDelegatedAuthentication",
-            dependencies: [.product(name: "AdyenAuthentication", package: "adyen-authentication-ios")],
-            path: "AdyenDelegatedAuthentication",
-            exclude: ["Info.plist"]
         )
     ]
 )
