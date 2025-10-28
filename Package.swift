@@ -37,20 +37,8 @@ let package = Package(
             targets: ["AdyenComponents"]
         ),
         .library(
-            name: "AdyenSession",
-            targets: ["AdyenSession"]
-        ),
-        .library(
             name: "AdyenDropIn",
             targets: ["AdyenDropIn"]
-        ),
-        .library(
-            name: "AdyenWeChatPay",
-            targets: ["AdyenWeChatPay"]
-        ),
-        .library(
-            name: "AdyenCashAppPay",
-            targets: ["AdyenCashAppPay"]
         ),
         .library(
             name: "AdyenTwint",
@@ -146,15 +134,6 @@ let package = Package(
             exclude: ["Info.plist"]
         ),
         .target(
-            name: "AdyenSession",
-            dependencies: [
-                .target(name: "Adyen"),
-                .target(name: "AdyenActions")
-            ],
-            path: "AdyenSession",
-            exclude: ["Info.plist"]
-        ),
-        .target(
             name: "AdyenDropIn",
             dependencies: [
                 .target(name: "AdyenCard"),
@@ -162,24 +141,6 @@ let package = Package(
                 .target(name: "AdyenActions")
             ],
             path: "AdyenDropIn",
-            exclude: ["Info.plist"]
-        ),
-        .target(
-            name: "AdyenWeChatPay",
-            dependencies: [
-                .product(name: "AdyenWeChatPayInternal", package: "adyen-wechatpay-ios"),
-                .target(name: "AdyenActions")
-            ],
-            path: "AdyenWeChatPay/WeChatPayActionComponent"
-        ),
-        .target(
-            name: "AdyenCashAppPay",
-            dependencies: [
-                .target(name: "Adyen"),
-                .product(name: "PayKit", package: "cash-app-pay-ios-sdk"),
-                .product(name: "PayKitUI", package: "cash-app-pay-ios-sdk")
-            ],
-            path: "AdyenCashAppPay",
             exclude: ["Info.plist"]
         ),
         .target(
