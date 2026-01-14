@@ -41,14 +41,6 @@ let package = Package(
         .package(
             url: "https://github.com/Adyen/adyen-networking-ios",
             exact: "3.0.1"
-        ),
-        .package(
-            url: "https://github.com/Adyen/adyen-wechatpay-ios",
-            exact: "2.2.0"
-        ),
-        .package(
-            url: "https://github.com/cashapp/cash-app-pay-ios-sdk",
-            exact: "0.6.2"
         )
     ],
     targets: [
